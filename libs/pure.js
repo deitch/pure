@@ -10,7 +10,7 @@
 	revision: 2.45
 */
 /*
- 	Modified by Avi Deitcher to provider support for Singular, jslint clean-up, multiple framework libraries, faster load times.
+	Modified by Avi Deitcher to provider support for Singular, jslint clean-up, multiple framework libraries, faster load times.
  */
 /*global Prototype, MooTools, Sly, Sizzle, Element, jQuery, DOMAssistant, $, $$, dojo, document, alert, console, window */
 
@@ -126,7 +126,19 @@ $p.core = function() {
 						strs[ strs.length ] = fnVal;
 						strs[ strs.length ] = pVal;
 					}
-					return strs.join('');
+					var text = strs.join(''), match;
+					
+					// do we have any checkboxes here? if so, we need to treat specially
+					// HTML makes a checkbox checked if the "checked" attribute is there, independent
+					// of its value. Thus, if checked is present, and anything other than "true" or "checked",
+					// ignoring case, then we remove that attribute entirely
+					match = text.match(/^(.*<input\s+[^>]*)(checked=[\"?])([^\"\s]*)([\"]?)(\s+[^>]*>)(.*)$/);
+					if (match)  {
+						if (!match[3].match(/^true$/i) && !match[3].match(/^checked$/i)) {
+							text = [match[1],match[5],match[6]].join('');
+						}
+					}
+					return text;
 				};
 			};
 
