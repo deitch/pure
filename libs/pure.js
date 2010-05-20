@@ -9,8 +9,12 @@
 	Thanks to Rog Peppe for the functional JS jump
 	revision: 2.45
 */
+/*
+ 	Modified by Avi Deitcher to provider support for Singular, jslint clean-up, multiple framework libraries, faster load times.
+ */
+/*global Prototype, MooTools, Sly, Sizzle, Element, jQuery, DOMAssistant, $, $$, dojo, document, alert, console, window */
 
-var $p, pure = $p = function(){
+var $p = function(){
 	var sel = arguments[0], 
 		ctxt = false;
 
