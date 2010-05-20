@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<script src="libs/jquery.js" type="text/javascript"></script>
+		<script src="libs/pure.js" type="text/javascript" charset="utf-8"></script>
+		
+	</head>
+	<body>
+		<div class="maindiv">
+			<div class="page-title">Title of the Page</div>
+			<table class="app-table">
+				<col class="app-name"/>
+				<col colspan="5" class="role"/>
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th class="perm-title">Administrator</th>
+						<th class="perm-title">Developer</th>
+						<th class="perm-title">Production</th>
+						<th class="perm-title">Finance</th>
+						<th class="perm-title">Audit</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="firstname">Adam</td>
+						<td class="Lastname">Smith</td>
+						<td class="appuser-perm"><input type="text" value="admin" checked="true"/></td>
+						<td class="appuser-perm"><input type="text" value="dev"/></td>
+						<td class="appuser-perm"><input type="text" value="prod"/></td>
+						<td class="appuser-perm"><input type="text" value="finance" checked="true"/></td>
+						<td class="appuser-perm"><input type="text" value="audit"/></td>
+					</tr>
+					<tr>
+						<td>Beverly</td>
+						<td><input type="checkbox" value="admin"/></td>
+						<td><input type="checkbox" value="dev" checked="true"/></td>
+						<td><input type="checkbox" value="prod" checked="true"/></td>
+						<td><input type="checkbox" value="finance"/></td>
+						<td><input type="checkbox" value="audit"/></td>
+					</tr>
+					<tr>
+						<td>Charlie</td>
+						<td><input type="checkbox" value="admin"/></td>
+						<td><input type="checkbox" value="dev" checked="true"/></td>
+						<td><input type="checkbox" value="prod" checked="true"/></td>
+						<td><input type="checkbox" value="finance"/></td>
+						<td><input type="checkbox" value="audit"/></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<script type="text/javascript">
+		var data, directive;
+		$(document).ready(function(){
+			directive = {
+				'table thead tr th.perm-title': {
+					'title<-titles': {
+						'.': 'title.name'
+					},
+					'singular': true					
+				},
+				'table tbody tr':{
+					'user<-users':{
+						'td.firstname': 'user.firstname',
+						'td.lastname': 'user.lastname',
+						'td.appuser-perm': {
+							'perm<-user.perms': {'input@value': 'perm.val'},
+							'singular': true
+						}
+						
+					},
+					'singular': true
+				},
+				'div.page-title': 'page-title'
+			};
+			data = {
+				'page-title': 'Singular and Nesting Tester',
+				'titles': [
+					{name: 'Administrator'},
+					{name: 'Developer'},
+					{name: 'Production'},
+					{name: 'Finance'},
+					{name: 'Audit'}							
+				],
+				'users':[
+					{'firstname': 'Andrew', 'lastname': 'Adams', 'perms': [{val: 'Yes'},{val: 'Yes'},{val: 'Yes'},{val: 'No'},{val: 'No'}]},
+					{'firstname': 'Brian', 'lastname': 'Beech', 'perms': [{val: 'No'},{val: 'No'},{val: 'Yes'},{val: 'No'},{val: 'No'}]},
+					{'firstname': 'Candice', 'lastname': 'Carlton', 'perms': [{val: 'Yes'},{val: 'No'},{val: 'Yes'},{val: 'No'},{val: 'Yes'}]}
+				]
+			}
+			fn = $("div.maindiv").compile(directive);
+			$("div.maindiv").render(data,fn);
+		});
+		</script>
+	</body>
+</html>
