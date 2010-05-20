@@ -216,18 +216,15 @@ $p.core = function() {
 
 			// wrap in an object the target node/attr and their properties
 			gettarget = function(dom, sel, isloop){
-				var osel, prepend, selector, attr, append, target = [];
+				var osel, prepend, selector, attr, append, target = [], sparts;
 				if( typeof sel === 'string' ){
 					osel = sel;
-					var m = sel.match(selRx);
-					if( !m ){
-						error( 'bad selector syntax: ' + sel );
-					}
+					sparts = getSelParts(sel);
 
-					prepend = m[1];
-					selector = m[2];
-					attr = m[3];
-					append = m[4];
+					prepend = sparts.prepend;
+					selector = sparts.selector;
+					attr = sparts.attr;
+					append = sparts.append;
 
 					if(selector === '.' || ( !selector && attr ) ){
 						target[0] = dom;
