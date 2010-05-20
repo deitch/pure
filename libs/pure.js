@@ -105,31 +105,29 @@ $p.core = function() {
 			// fns[0] is unused.
 			// this is the inner template evaluation loop.
 			concatenator = function(parts, fns){
-				return function(parts,fns){
-					return function(ctxt) {
-						var strs = [ parts[ 0 ] ],
-							n = parts.length,
-							fnVal, pVal, attLine, pos;
+				return function(ctxt) {
+					var strs = [ parts[ 0 ] ],
+						n = parts.length,
+						fnVal, pVal, attLine, pos;
 
-						for(var i = 1; i < n; i++){
-							fnVal = fns[i]( ctxt );
-							pVal = parts[i];
+					for(var i = 1; i < n; i++){
+						fnVal = fns[i]( ctxt );
+						pVal = parts[i];
 
-							// if the value is empty and attribute, remove it
-							if(fnVal === ''){
-								attLine = strs[ strs.length - 1 ];
-								if( ( pos = attLine.search( /[\w]+=\"?$/ ) ) > -1){
-									strs[ strs.length - 1 ] = attLine.substring( 0, pos );
-									pVal = pVal.substr( 1 );
-								}
+						// if the value is empty and attribute, remove it
+						if(fnVal === ''){
+							attLine = strs[ strs.length - 1 ];
+							if( ( pos = attLine.search( /[\w]+=\"?$/ ) ) > -1){
+								strs[ strs.length - 1 ] = attLine.substring( 0, pos );
+								pVal = pVal.substr( 1 );
 							}
-
-							strs[ strs.length ] = fnVal;
-							strs[ strs.length ] = pVal;
 						}
-						return strs.join('');
-					};
-				}(parts,fns);
+
+						strs[ strs.length ] = fnVal;
+						strs[ strs.length ] = pVal;
+					}
+					return strs.join('');
+				};
 			};
 
 			// parse and check the loop directive
@@ -179,24 +177,26 @@ $p.core = function() {
 					return concatenator(parts, pfns);
 				}
 				m = sel.split('.');
-				return function(ctxt){
-					var data = ctxt.context;
-					if(!data){
-						return '';
-					}
-					var	v = ctxt[m[0]],
-						i = 0;
-					if(v && v.item){
-						data = v.item;
-						i += 1;
-					}
-					var n = m.length;
-					for(; i < n; i++){
-						if(!data){break;}
-						data = data[m[i]];
-					}
-					return (!data && data !== 0) ? '':data;
-				};
+				return function(m){
+					return function(ctxt){
+						var data = ctxt.context;
+						if(!data){
+							return '';
+						}
+						var	v = ctxt[m[0]],
+							i = 0;
+						if(v && v.item){
+							data = v.item;
+							i += 1;
+						}
+						var n = m.length;
+						for(; i < n; i++){
+							if(!data){break;}
+							data = data[m[i]];
+						}
+						return (!data && data !== 0) ? '':data;
+					};
+				}(m);
 			};
 
 			// break a selector down into components
